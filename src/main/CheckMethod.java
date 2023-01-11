@@ -29,7 +29,7 @@ public class CheckMethod {
     public static boolean checkMethodName() {
         return true;
     }
-
+    //chess(5)
     //append HashMap
     public static boolean checkMethodDec(String line) {
         definition = line;
