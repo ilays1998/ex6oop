@@ -3,15 +3,6 @@ package main;
 import java.util.regex.Pattern;
 
 public class CheckRow {
-    public static void checkEmptyLine(String line) throws RowException {
-        if (!Pattern.matches("^\\s*$", line))
-            throw new RowException();
-    }
-
-    public static void checkCommand(String line) throws RowException {
-        if (!Pattern.matches("^//.*", line))
-            throw new RowException();
-    }
 
     public static void checkSemicolon(String line) throws RowException {
         if (!Pattern.matches("\\s*;\\s*$", line))

@@ -2,12 +2,14 @@ package method;
 
 import main.CheckRow;
 import main.CheckVriable;
+import main.RowException;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CheckMethod {
+    private static final String RETURN_REG = "\\s*return\\s*;\\s*";
     public static String definition;
     public static String name;
     public static final String CHECK_METHOD_NAME = "^([a-zA-Z]\\w*)\\s*";
@@ -20,6 +22,16 @@ public class CheckMethod {
     public static void checkMethod() throws MethodException {
         //checkMethodDec() && checkMethodBody();
         throw new MethodException();
+    }
+    public static void checkReturn(String line) throws MethodException {
+        if (!Pattern.matches(RETURN_REG, line))
+            throw new MethodException("RETURN ILLEGAL");
+        lastReturn = true;
+    }
+
+    public static void checkEndMethod(String line) throws RowException {
+        CheckRow.checkBracketClosing(line);
+        endMethod = true;
     }
 
     public static void checkMethodBody(String line) throws MethodException {
@@ -132,6 +144,8 @@ public class CheckMethod {
     public static void main(String[] args) {
         String name = " void name (int x, boolean bb) {";
         String call = "call(5, 6);";
+        String ret = "return ;";
+        String close = "}";
         CheckMethod.definition = name;
         /*System.out.println(CheckMethod.checkVoid());
         System.out.println(CheckMethod.definition);
@@ -140,7 +154,9 @@ public class CheckMethod {
         try {
             checkMethodDec(name);
             checkMethodCall(call);
-        } catch (MethodException e) {
+            checkReturn(ret);
+            checkEndMethod(close);
+        } catch (MethodException | RowException e) {
             e.printStackTrace();
             System.out.println();
         }
