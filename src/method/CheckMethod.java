@@ -3,6 +3,7 @@ package method;
 import main.CheckRow;
 import main.CheckVriable;
 import main.RowException;
+import main.ValidityError;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -17,12 +18,12 @@ public class CheckMethod {
     public static boolean lastReturn;
     public static boolean methodBody;
     public static boolean endMethod;
+    public static final String PREFIX_RETURN = "\\s*return.*";
+    public static final String PREFIX_WHILE = "\\s*while.*";
+    public static final String PREFIX_IF = "\\s*if.*";
 
 
-    public static void checkMethod() throws MethodException {
-        //checkMethodDec() && checkMethodBody();
-        throw new MethodException();
-    }
+
     public static void checkReturn(String line) throws MethodException {
         if (!Pattern.matches(RETURN_REG, line))
             throw new MethodException("RETURN ILLEGAL");
@@ -34,16 +35,28 @@ public class CheckMethod {
         endMethod = true;
     }
 
-    public static void checkMethodBody(String line) throws MethodException {
-//        try {
-//            if (CheckVriable.check(line))
-//                return true;
-//
-//            return true;
-//        } catch (ValidityError validityError) {
-//            validityError.printStackTrace();
-//            throw new MethodException();
-//        }
+    public static void checkMethodBody(String line) throws MethodException, RowException, ValidityError {
+        if (line.trim().length() < 2) {
+            checkEndMethod(line);
+        }
+        else if (Pattern.matches(PREFIX_RETURN, line)) {
+            checkReturn(line);
+        }
+        else {
+            lastReturn = false;
+            if (Pattern.matches(PREFIX_WHILE, line) || Pattern.matches(PREFIX_IF, line)) {
+                //need to add the new scope
+                WhileIfBlock.depth += 1;
+                CheckMethod.endMethod = false;
+            }
+            else{
+                try {
+                    checkMethodCall(line);
+                } catch (MethodException e) {
+                    CheckVriable.check(line);
+                }
+            }
+        }
     }
 
     public static void checkVoid() throws MethodException {

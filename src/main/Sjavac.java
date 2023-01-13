@@ -25,6 +25,16 @@ public class Sjavac {
                 if (Pattern.matches("^void .*", line.trim())) {
                     CheckMethod.checkMethodDec(line);
                     CheckMethod.methodBody = true;
+                    CheckMethod.endMethod = false;
+                    CheckMethod.lastReturn = false;
+                    //need to add new scope
+                }
+                else if (WhileIfBlock.depth > 0) {
+                    CheckMethod.checkMethodBody(line);
+                    if (CheckMethod.endMethod) {
+                        //need to erase the last scope
+                        WhileIfBlock.depth -= 1;
+                    }
                 }
                 else if (CheckMethod.methodBody) {
                     CheckMethod.checkMethodBody(line);
@@ -32,7 +42,11 @@ public class Sjavac {
                         if (!CheckMethod.lastReturn)
                             throw new Exception("METHOD MUST END WITH RETURN");
                         CheckMethod.methodBody = false;
+                        //need to erase the last scope
                     }
+                }
+                else {
+                    CheckVriable.check(line);
                 }
 
             }
