@@ -3,28 +3,37 @@ package main;
 import java.util.regex.Pattern;
 
 public class CheckRow {
-    public static boolean checkEmptyLine(String line) {
-        return Pattern.matches("^\\s*$", line);
+    public static void checkEmptyLine(String line) throws RowException {
+        if (!Pattern.matches("^\\s*$", line))
+            throw new RowException();
     }
 
-    public static boolean checkCommand(String line) {
-        return Pattern.matches("^//.*", line);
+    public static void checkCommand(String line) throws RowException {
+        if (!Pattern.matches("^//.*", line))
+            throw new RowException();
     }
 
-    public static boolean checkSemicolon(String line) {
-        return Pattern.matches("\\s*;\\s*$", line);
+    public static void checkSemicolon(String line) throws RowException {
+        if (!Pattern.matches("\\s*;\\s*$", line))
+            throw new RowException();
     }
 
-    public static boolean checkBracketOpening(String line) {
-        return Pattern.matches("\\s*\\{\\s*", line);
+    public static void checkBracketOpening(String line) throws RowException {
+        if (!Pattern.matches("\\s*\\{\\s*", line))
+            throw new RowException();
     }
 
-    public static boolean checkBracketClosing(String line) {
-        return Pattern.matches("\\s*}\\s*", line);
+    public static void checkBracketClosing(String line) throws RowException {
+        if (!Pattern.matches("\\s*}\\s*", line))
+            throw new RowException();
     }
 
     public static void main(String[] args) {
-        System.out.println(CheckRow.checkBracketClosing("  { "));
+        try {
+            CheckRow.checkBracketClosing("  { ");
+        } catch (RowException e) {
+            e.printStackTrace();
+        }
 
     }
 

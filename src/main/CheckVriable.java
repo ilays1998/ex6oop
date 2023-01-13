@@ -147,7 +147,7 @@ public class CheckVriable {
     }
 
     ///this function for check valid value according to type
-    private static void validTypeValue(String type, String value) throws ValidityError{
+    public static void validTypeValue(String type, String value) throws ValidityError{
         boolean match = false;
         switch (type) {
             case "int" -> match = Pattern.compile(INT).matcher(value).matches();
