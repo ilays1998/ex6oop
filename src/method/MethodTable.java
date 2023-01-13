@@ -1,4 +1,4 @@
-package Tables;
+package method;
 
 import main.CheckVriable;
 import main.ValidityError;

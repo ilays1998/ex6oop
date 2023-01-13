@@ -1,10 +1,10 @@
 package main;
 
 
-import Tables.CheckMethod;
-import Tables.MethodException;
-import Tables.MethodTable;
-import Tables.MethodTableCheckException;
+import method.CheckMethod;
+import method.MethodTable;
+import method.MethodTableCheckException;
+import method.WhileIfBlock;
 
 import java.io.*;
 import java.util.regex.Pattern;
@@ -17,6 +17,7 @@ public class Sjavac {
         CheckMethod.methodBody = false;
         CheckMethod.lastReturn = false;
         CheckMethod.endMethod = false;
+        WhileIfBlock.depth = 0;
 
         try (FileReader fileReader = new FileReader(args[0]);
              BufferedReader bufferedReader = new BufferedReader(fileReader)){

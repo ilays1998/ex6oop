@@ -1,11 +1,8 @@
-package Tables;
+package method;
 
 import main.CheckRow;
 import main.CheckVriable;
-import main.RowException;
-import main.ValidityError;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

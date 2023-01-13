@@ -1,4 +1,4 @@
-package Tables;
+package method;
 
 public class MethodException extends Exception {
     public MethodException(String s) {
