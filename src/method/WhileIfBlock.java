@@ -24,8 +24,15 @@ public class WhileIfBlock {
             pattern = Pattern.compile(EMPTY);
             Matcher m = pattern.matcher(line);
             if (m.matches()) {
-                //if (scope.exist(m.group(2)))
-                System.out.println(m.group(2));
+                if (Pattern.matches("\\s*", m.group(2)))
+                    throw new WhileIfException("EMPTY CONDITION");
+                String[] parameters = m.group(2).split(",");
+                for (String par: parameters) {
+                    if (!CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).exists(par.trim()) &&
+                        !Pattern.matches(CheckVriable.BOOLEAN, par.trim()))
+                        throw new MethodException("PARAMETER LIST ILLEGAL");
+                }
+                //System.out.println(m.group(2));
             }
             else
                 throw new Exception();

@@ -126,6 +126,7 @@ public class CheckMethod {
 
     }
 
+    //need to add parameters in scope
     private static void checkParameterListCall() throws MethodException {
         String[] parameters = definition.split(",");
         ArrayList<String> types = new ArrayList<>();
@@ -133,7 +134,13 @@ public class CheckMethod {
             if (!Pattern.matches(CheckVriable.INT + "|" +
                     CheckVriable.BOOLEAN + "|" + CheckVriable.STRING + "|" +
                     CheckVriable.DOBULE + "|" +CheckVriable.CHAR + "|\\s*", par.trim()))
-                throw new MethodException("PARAMETER LIST ILLEGAL");
+                if (!CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).exists(par.trim()))
+                    throw new MethodException("PARAMETER LIST ILLEGAL");
+                else {
+                    types.add(CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).
+                            findVar(par.trim()).value);
+                    continue;
+                }
             types.add(par.trim());
         }
         //System.out.println(types);
