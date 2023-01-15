@@ -22,7 +22,7 @@ public class Sjavac {
         try (FileReader fileReader = new FileReader(args[0]);
              BufferedReader bufferedReader = new BufferedReader(fileReader)){
             while((line = bufferedReader.readLine()) != null) {
-                if (Pattern.matches("^void .*", line.trim())) {
+                if (Pattern.matches("^void .*", line.trim()) && !CheckMethod.methodBody) {
                     CheckMethod.checkMethodDec(line);
                     CheckMethod.methodBody = true;
                     CheckMethod.endMethod = false;
@@ -48,7 +48,6 @@ public class Sjavac {
                 else {
                     CheckVriable.check(line);
                 }
-
             }
 
         } catch (IOException e) {

@@ -18,9 +18,8 @@ public class CheckMethod {
     public static boolean lastReturn;
     public static boolean methodBody;
     public static boolean endMethod;
-    public static final String PREFIX_RETURN = "\\s*return.*";
-    public static final String PREFIX_WHILE = "\\s*while.*";
-    public static final String PREFIX_IF = "\\s*if.*";
+    public static final String PREFIX_WHILE = "\\s*while\\s*\\(" ;
+    public static final String PREFIX_IF = "\\s*if\\s*\\(" ;
 
 
 
@@ -39,7 +38,7 @@ public class CheckMethod {
         if (line.trim().length() < 2) {
             checkEndMethod(line);
         }
-        else if (Pattern.matches(PREFIX_RETURN, line)) {
+        else if (Pattern.matches(RETURN_REG, line)) {
             checkReturn(line);
         }
         else {
