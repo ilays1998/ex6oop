@@ -108,13 +108,24 @@ public class CheckMethod {
             m = Pattern.compile(CheckVriable.TYPE  + "\\s" + CheckVriable.VARDICNAME  +"|"
                      +CheckVriable.FINAL_VARDIK_LINE + "|\\s*")
                     .matcher(par.trim());
+            //8888888888888888888888888
             //problem in CheckVriable.FINAL_VARDIK_LINE
+
             if (!m.matches())
                 throw new MethodException("PARAMETER LIST ILLEGAL");
-            types.add(m.group(1));
-            CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(1),
-                    m.group(2), null, false);
+            if (m.group(1).equals("final")) {
+                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(1),
+                        m.group(2), null, true);
+            }
+            else {
+                types.add(m.group(1));
+                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(1),
+                        m.group(2), null, false);
+            }
+
+            //888888888888888888888888888888
             //need to modify this to without value
+
         }
         //System.out.println(types);
         MethodTable.addMethodDec(name, types);
