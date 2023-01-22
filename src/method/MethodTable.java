@@ -35,10 +35,12 @@ public class MethodTable {
     }
     
     public static void checkTable() throws MethodTableCheckException {
+
         if (methods.containsValue(false))
             throw new MethodTableCheckException("USE IN METHOD WITHOUT DECLARATION");
         for (String name: methods.keySet()) {
-            checkTypeEqualsVariables(name);
+            if (!variablesList.isEmpty())
+                checkTypeEqualsVariables(name);
         }
     }
 

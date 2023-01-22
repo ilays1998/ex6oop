@@ -19,14 +19,14 @@ public class CheckRow {
             throw new RowException();
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             CheckRow.checkBracketClosing("  { ");
         } catch (RowException e) {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
 }
 

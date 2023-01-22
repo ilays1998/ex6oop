@@ -163,4 +163,10 @@ public class CheckVriable {
             throw new ValidityError("THERE IS NO MATCH BETWEEN TYPE AND VALUE");
         }
     }
+
+    public static void addNewScope() {
+        Scope newScope = new Scope();
+        newScope.setPrevScope(CheckVriable.scopes.get(CheckVriable.scopes.size() - 1));
+        CheckVriable.scopes.add(newScope);
+    }
 }

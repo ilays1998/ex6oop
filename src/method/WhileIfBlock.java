@@ -43,12 +43,12 @@ public class WhileIfBlock {
 
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String whi = "if(x) {";
         try {
             checkBlockDec(whi);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

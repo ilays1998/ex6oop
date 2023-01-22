@@ -5,10 +5,14 @@ import java.util.ArrayList;
 
 /// the class of the scope that is contain the variables in the scope
 public class Scope {
+
     Scope prevScope = null;
     public ArrayList<VariableLine> variables;
-    Scope() {this.variables = new ArrayList<>();}
+    public Scope() {this.variables = new ArrayList<>();}
 
+    public void setPrevScope(Scope prevScope) {
+        this.prevScope = prevScope;
+    }
 
     /// this function check if this variable is exist in this scope or up to this scope
     public boolean exists(String name) {

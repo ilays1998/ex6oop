@@ -4,6 +4,7 @@ import main.CheckRow;
 import main.CheckVriable;
 import main.RowException;
 import main.ValidityError;
+import main.CheckVriable;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -45,14 +46,15 @@ public class CheckMethod {
             lastReturn = false;
             if (Pattern.matches(PREFIX_WHILE, line) || Pattern.matches(PREFIX_IF, line)) {
                 //need to add the new scope
+                CheckVriable.addNewScope();
                 WhileIfBlock.depth += 1;
                 CheckMethod.endMethod = false;
             }
             else{
                 try {
-                    checkMethodCall(line);
-                } catch (MethodException e) {
                     CheckVriable.check(line);
+                } catch (Exception e) {
+                    checkMethodCall(line);
                 }
             }
         }
@@ -103,12 +105,16 @@ public class CheckMethod {
         ArrayList<String> types = new ArrayList<>();
         Matcher m;
         for (String par: parameters) {
-            m = Pattern.compile(CheckVriable.FINAL_VARDIK_LINE +"|"
-                    + CheckVriable.TYPE + "\\s" + CheckVriable.VARDICNAME + "|\\s*")
+            m = Pattern.compile(CheckVriable.TYPE  + "\\s" + CheckVriable.VARDICNAME  +"|"
+                     +CheckVriable.FINAL_VARDIK_LINE + "|\\s*")
                     .matcher(par.trim());
+            //problem in CheckVriable.FINAL_VARDIK_LINE
             if (!m.matches())
                 throw new MethodException("PARAMETER LIST ILLEGAL");
             types.add(m.group(1));
+            CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(1),
+                    m.group(2), null, false);
+            //need to modify this to without value
         }
         //System.out.println(types);
         MethodTable.addMethodDec(name, types);
@@ -160,16 +166,16 @@ public class CheckMethod {
     }
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String name = " void name (int x, boolean bb) {";
         String call = "call(5, 6);";
         String ret = "return ;";
         String close = "}";
         CheckMethod.definition = name;
-        /*System.out.println(CheckMethod.checkVoid());
+        *//*System.out.println(CheckMethod.checkVoid());
         System.out.println(CheckMethod.definition);
         System.out.println(CheckMethod.checkParameterList());
-        System.out.println(CheckMethod.definition);*/
+        System.out.println(CheckMethod.definition);*//*
         try {
             checkMethodDec(name);
             checkMethodCall(call);
@@ -181,6 +187,6 @@ public class CheckMethod {
         }
 
 
-    }
+    }*/
 
 }
