@@ -113,9 +113,12 @@ public class CheckMethod {
 
             if (!m.matches())
                 throw new MethodException("PARAMETER LIST ILLEGAL");
+            if (m.group(1) == null)
+                return;
             if (m.group(1).equals("final")) {
-                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(1),
-                        m.group(2), null, true);
+                types.add(m.group(2));
+                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(2),
+                        m.group(3), null, true);
             }
             else {
                 types.add(m.group(1));

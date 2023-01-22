@@ -53,6 +53,8 @@ public class CheckVriable {
                           scopeDepth);
 
         }
+        else
+            throw new ValidityError("VARIABLE ILLEGAL");
     }
 
 
