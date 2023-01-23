@@ -40,9 +40,11 @@ public class CheckMethod {
             checkEndMethod(line);
         }
         else if (Pattern.matches(RETURN_REG, line)) {
+            endMethod = false;
             checkReturn(line);
         }
         else {
+            endMethod = false;
             lastReturn = false;
             if (Pattern.matches(PREFIX_WHILE, line) || Pattern.matches(PREFIX_IF, line)) {
                 //need to add the new scope

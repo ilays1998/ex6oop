@@ -12,7 +12,7 @@ public class MethodTable {
     private static HashMap<String, ArrayList<ArrayList<String>>> variablesList = new HashMap<>();
 
     public static void addMethodDec(String name, ArrayList<String> types) throws MethodTableCheckException {
-        if (methods.containsKey(name)) {
+        if (methods.containsKey(name) && methods.get(name)) {
             throw new MethodTableCheckException("OVERLOADING METHOD");
         }
         else {

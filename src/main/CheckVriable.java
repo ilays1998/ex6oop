@@ -54,7 +54,7 @@ public class CheckVriable {
 
         }
         else
-            throw new ValidityError("VARIABLE ILLEGAL");
+            throw new ValidityError("VARIABLE ILLEGAL: " + line);
     }
 
 

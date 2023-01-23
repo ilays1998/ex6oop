@@ -21,6 +21,7 @@ public class Sjavac {
         CheckMethod.lastReturn = false;
         CheckMethod.endMethod = false;
         WhileIfBlock.depth = 0;
+        int numOflines = 0;
         try {
             if (args.length < 1)
                 throw new IOException("NUM OF ARGUMENT ILLEGAL");
@@ -35,6 +36,7 @@ public class Sjavac {
         try (FileReader fileReader = new FileReader(args[0]);
              BufferedReader bufferedReader = new BufferedReader(fileReader)){
             while((line = bufferedReader.readLine()) != null) {
+                numOflines += 1;
                 if (Pattern.matches("^//.*", line))
                     continue;
                 if (Pattern.matches("^\\s*$", line))
@@ -76,6 +78,7 @@ public class Sjavac {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(1);
+            System.out.println(numOflines);
             return;
         }
         try {MethodTable.checkTable();} catch (MethodTableCheckException e) {
