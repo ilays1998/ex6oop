@@ -2,10 +2,7 @@ package main;
 
 import main.CheckVriable;
 import main.Scope;
-import method.CheckMethod;
-import method.MethodTable;
-import method.MethodTableCheckException;
-import method.WhileIfBlock;
+import method.*;
 
 import java.io.*;
 import java.util.regex.Pattern;
@@ -72,14 +69,28 @@ public class Sjavac {
                 }
             }
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             System.out.println(2);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(1);
-            System.out.println(numOflines);
-            return;
+            try {
+                throw new Exception("IN LINE: " + numOflines);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.out.println(1);
+                return;
+            }
+        }
+        if (CheckMethod.methodBody) {
+            try {
+                throw new Exception("METHOD END ILLEGAL");
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println(1);
+                return;
+            }
         }
         try {MethodTable.checkTable();} catch (MethodTableCheckException e) {
             e.printStackTrace();
