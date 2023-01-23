@@ -155,8 +155,8 @@ public class CheckMethod {
             e.printStackTrace();
             throw new MethodException("CALL METHOD ILLEGAL:" + line);
         }
-
     }
+
 
     //need to add parameters in scope
     private static void checkParameterListCall() throws MethodException {

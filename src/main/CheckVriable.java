@@ -60,7 +60,10 @@ public class CheckVriable {
 
 
     public static void initializeFinal(Matcher matcher, int scopeDepth) throws ValidityError {
-        //System.out.println(matcher.group(0).trim());
+        if (!matcher.matches()) {
+            throw new ValidityError();
+        }
+        String all= matcher.group();
         String type = matcher.group(2).trim();
         String name = matcher.group(3).trim();
         String value = matcher.group(6).trim();
