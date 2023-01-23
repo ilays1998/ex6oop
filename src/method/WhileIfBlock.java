@@ -54,12 +54,12 @@ public class WhileIfBlock {
         return type.equals("char") || type.equals("String");
     }
 
-    public static void main(String[] args) {
-        String whi = "if(true || false) {";
-        try {
-            checkBlockDec(whi);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        String whi = "if(true || false) {";
+//        try {
+//            checkBlockDec(whi);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
