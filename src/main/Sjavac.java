@@ -21,6 +21,16 @@ public class Sjavac {
         CheckMethod.lastReturn = false;
         CheckMethod.endMethod = false;
         WhileIfBlock.depth = 0;
+        try {
+            if (args.length < 1)
+                throw new IOException("NUM OF ARGUMENT ILLEGAL");
+            String[] fileSplit = args[0].split("\\.");
+            if (fileSplit.length < 2 || !fileSplit[fileSplit.length - 1].equals("sjava"))
+                throw new IOException("ILLEGAL FILE FORMAT");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(2);
+        }
 
         try (FileReader fileReader = new FileReader(args[0]);
              BufferedReader bufferedReader = new BufferedReader(fileReader)){

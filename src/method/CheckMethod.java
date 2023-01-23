@@ -19,8 +19,8 @@ public class CheckMethod {
     public static boolean lastReturn;
     public static boolean methodBody;
     public static boolean endMethod;
-    public static final String PREFIX_WHILE = "\\s*while\\s*\\(" ;
-    public static final String PREFIX_IF = "\\s*if\\s*\\(" ;
+    public static final String PREFIX_WHILE = "\\s*while\\s*\\(.*" ;
+    public static final String PREFIX_IF = "\\s*if\\s*\\(.*" ;
 
 
 
