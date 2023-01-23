@@ -19,18 +19,21 @@ public class WhileIfBlock {
     public static void checkBlockDec(String line) throws Exception {
         Pattern pattern = Pattern.compile(BLOCK_DEC + '|' + BLOCK_DEC_OR +
                 '|' + BLOCK_DEC_AND);
-        if (!pattern.matcher(line.trim()).matches())
+        if (pattern.matcher(line.trim()).matches())
         {
             pattern = Pattern.compile(EMPTY);
             Matcher m = pattern.matcher(line);
             if (m.matches()) {
                 if (Pattern.matches("\\s*", m.group(2)))
                     throw new WhileIfException("EMPTY CONDITION");
-                String[] parameters = m.group(2).split(",");
+                String[] parameters = m.group(2).split("&&|\\|\\|");
                 for (String par: parameters) {
                     if (!CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).exists(par.trim()) &&
                         !Pattern.matches(CheckVriable.BOOLEAN, par.trim()))
                         throw new MethodException("PARAMETER LIST ILLEGAL");
+//                    System.out.println(par);
+//                    if (!Pattern.matches(CheckVriable.BOOLEAN, par.trim()))
+//                        throw new MethodException("PARAMETER LIST ILLEGAL");
                 }
                 //System.out.println(m.group(2));
             }
@@ -43,12 +46,12 @@ public class WhileIfBlock {
 
     }
 
-    /*public static void main(String[] args) {
-        String whi = "if(x) {";
+    public static void main(String[] args) {
+        String whi = "if(true || false) {";
         try {
             checkBlockDec(whi);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }
