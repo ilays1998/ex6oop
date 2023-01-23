@@ -28,6 +28,7 @@ public class Sjavac {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(2);
+            return;
         }
 
         try (FileReader fileReader = new FileReader(args[0]);

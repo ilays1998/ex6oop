@@ -55,7 +55,7 @@ public class MethodTable {
                 try {
                     checkVarVsType(types.get(i), list.get(i));
                 } catch (MethodTableCheckException methodTableCheckExeption) {
-                    throw new MethodTableCheckException("PARAMETERS TYPE NOT FIT IN METHOD" + name);
+                    throw new MethodTableCheckException("PARAMETERS TYPE NOT FIT IN METHOD: " + name);
                 }
 
             }
