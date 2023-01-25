@@ -12,6 +12,7 @@ public class MethodTable {
     private static HashMap<String, ArrayList<ArrayList<String>>> variablesList = new HashMap<>();
 
     public static void addMethodDec(String name, ArrayList<String> types) throws MethodTableCheckException {
+        name = name.trim();
         if (methods.containsKey(name) && methods.get(name)) {
             throw new MethodTableCheckException("OVERLOADING METHOD");
         }
@@ -22,10 +23,11 @@ public class MethodTable {
     }
 
     public static ArrayList<String> getTypes(String name) {
-        return variablesType.get(name);
+        return variablesType.get(name.trim());
     }
 
     public static void addMethodCall(String name, ArrayList<String> variables) {
+        name = name.trim();
         if (!variablesList.containsKey(name))
             variablesList.put(name, new ArrayList<>());
         variablesList.get(name).add(variables);
