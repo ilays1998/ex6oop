@@ -4,6 +4,6 @@ a = 7;
 return;
 }
 void boo(){
-int b = a;
+foo(5);
 return;
 }

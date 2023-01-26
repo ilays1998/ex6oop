@@ -4,6 +4,7 @@ import main.CheckVriable;
 import main.ValidityError;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class MethodTable {
@@ -37,11 +38,19 @@ public class MethodTable {
     }
     
     public static void checkTable() throws MethodTableCheckException {
-
         if (methods.containsValue(false))
             throw new MethodTableCheckException("USE IN METHOD WITHOUT DECLARATION");
         for (String name: methods.keySet()) {
-            if (!variablesList.isEmpty())
+            if (variablesType.get(name).isEmpty()) {
+                if (!variablesList.containsKey(name))
+                    continue;
+                for (ArrayList<String> a:variablesList.get(name))
+                    for (String str : a)
+                        if (!str.trim().equals(""))
+                            throw new MethodTableCheckException("METHOD WITHOUT PARAMETERS BUT CALL WITH: " + name);
+                continue;
+            }
+            if (variablesList.containsKey(name) && !variablesList.get(name).isEmpty())
                 checkTypeEqualsVariables(name);
         }
     }

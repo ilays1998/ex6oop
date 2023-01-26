@@ -1,4 +1,6 @@
 void foo(int a) {
-String a;
+return;
+}
+void foo() {
 return;
 }

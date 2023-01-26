@@ -9,4 +9,15 @@ test5 - check assign variable to same variable
 test6 - check final
 test7 - check parameter type not fit;
 test8 - check without type
-test9 -
+test9 - check method that not end
+test10 - check empty lines
+test11 - check return statement
+test12 - check empty method that call with parameter
+test13 - check declaration without void
+test14 - check regular documentation
+test15 - check overriding methods
+test16 - parameters illegal
+test17 - check illegal size of parameters in call
+test18 - check closing semicolon
+test19 - Method not end with return;
+test20 - check while and if loops

@@ -3,6 +3,6 @@ void foo() {
 return;
 }
 
-void foo2(int b, int c) {
+void foo2(int b, int c, int f) {
 return;
 }

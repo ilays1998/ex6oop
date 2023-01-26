@@ -1,4 +1,4 @@
-int foo() {
+foo() {
 double b = 6.6;
 return b;
 }

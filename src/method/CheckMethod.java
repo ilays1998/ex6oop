@@ -103,8 +103,13 @@ public class CheckMethod {
 
     //append this to scope
     private static void checkParameterListDec() throws MethodException {
-        String[] parameters = definition.split(",");
         ArrayList<String> types = new ArrayList<>();
+        if (definition.trim().equals("")) {
+
+            MethodTable.addMethodDec(name, types);
+        }
+        String[] parameters = definition.split(",");
+
         Matcher m;
         for (String par: parameters) {
             m = Pattern.compile(CheckVriable.TYPE  + "\\s" + CheckVriable.VARDICNAME  +"|"
