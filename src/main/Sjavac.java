@@ -2,7 +2,10 @@ package main;
 
 import main.CheckVriable;
 import main.Scope;
-import method.*;
+import method.CheckMethod;
+import method.MethodTable;
+import method.MethodTableCheckException;
+import method.WhileIfBlock;
 
 import java.io.*;
 import java.util.regex.Pattern;
@@ -18,23 +21,10 @@ public class Sjavac {
         CheckMethod.lastReturn = false;
         CheckMethod.endMethod = false;
         WhileIfBlock.depth = 0;
-        int numOflines = 0;
-        try {
-            if (args.length < 1)
-                throw new IOException("NUM OF ARGUMENT ILLEGAL");
-            String[] fileSplit = args[0].split("\\.");
-            if (fileSplit.length < 2 || !fileSplit[fileSplit.length - 1].equals("sjava"))
-                throw new IOException("ILLEGAL FILE FORMAT");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(2);
-            return;
-        }
 
         try (FileReader fileReader = new FileReader(args[0]);
              BufferedReader bufferedReader = new BufferedReader(fileReader)){
             while((line = bufferedReader.readLine()) != null) {
-                numOflines += 1;
                 if (Pattern.matches("^//.*", line))
                     continue;
                 if (Pattern.matches("^\\s*$", line))
@@ -70,28 +60,13 @@ public class Sjavac {
                 }
             }
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println(2);
         } catch (Exception e) {
             e.printStackTrace();
-            try {
-                throw new Exception("IN LINE: " + numOflines);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                System.out.println(1);
-                return;
-            }
-        }
-        if (CheckMethod.methodBody) {
-            try {
-                throw new Exception("METHOD END ILLEGAL");
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(1);
-                return;
-            }
+            System.out.println(1);
+            return;
         }
         try {MethodTable.checkTable();} catch (MethodTableCheckException e) {
             e.printStackTrace();

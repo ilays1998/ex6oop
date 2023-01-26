@@ -1,7 +1,9 @@
 final int a = 5;
 final int b = a;
+int c=6;
 String s;
 void boo(int a, int b, String s) {
+    String c ;
 	if (true) {
 		boo(1,2,"hello");
 		while (false) {

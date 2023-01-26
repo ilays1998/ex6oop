@@ -10,6 +10,10 @@ import java.util.regex.Pattern;
 
 public class CheckVriable {
 
+
+
+
+
     /// we can move (scopes and scopeDepth ) to Sjavac class
     public static ArrayList<Scope> scopes = new ArrayList<>();
     private static int scopeDepth = 0;
@@ -27,9 +31,17 @@ public class CheckVriable {
             "|" + INT + "|" + BOOLEAN + "|" + VARDICNAME + "|" + STRING + "|" + CHAR + ")+\\s*;\\s*";
     public static final String WITHOUT_EQUAL_MODIFER = "\\s*" + TYPE + "\\s(\\s*" + VARDICNAME +
             "\\s*)\\s*;\\s*";
-    public static final String VARIDK_LINE = "\\s*" + TYPE + "\\s" + VARDICNAME + "\\s*=\\s*(" +
+    public static final String VARIDK_LINE = "\\s*" + TYPE + "\\s*" + VARDICNAME + "\\s*=\\s*(" +
             DOBULE + "|\\\"\\\"|" + INT + "|" + BOOLEAN + "|" + VARDICNAME + "|" + STRING + "|"
             + CHAR + ")\\s*;\\s*";
+
+    public static final String VARIABLE_VALUE = DOBULE + "|" + INT + "|" + STRING + "|" + BOOLEAN + "|" +
+            CHAR;
+    public static final String ASSIGNMENT = "\\s*=\\s*(" + VARIABLE_VALUE + "|" + VARDICNAME + ")";
+    public static final String DECLARATION_EXPRESSION = "(" + VARDICNAME + ")\\s*(" + ASSIGNMENT + ")?";
+    public static final String VARIABLE_DECLARATION_LINE = "\\s*" + "(" + "final" + "\\s+)?(" + TYPE + ")\\s+("
+            + "(" + DECLARATION_EXPRESSION + "\\s*,\\s*)*" + DECLARATION_EXPRESSION + ")\\s*;\\s*";
+
 
 
 
@@ -52,12 +64,46 @@ public class CheckVriable {
             decelerateVar(Pattern.compile(VARIDK_LINE).matcher(line),
                           scopeDepth);
 
+        }else if (Pattern.compile(VARIABLE_DECLARATION_LINE).matcher(line).matches()){
+            initializaManyVariable(Pattern.compile(VARIABLE_DECLARATION_LINE).matcher(line),
+                          scopeDepth);
         }
+
         else
             throw new ValidityError("VARIABLE ILLEGAL: " + line);
     }
 
+    public static void initializaManyVariable(Matcher matcher,int scopeDepth) throws ValidityError{
+        if (!matcher.matches()) {
+            throw new ValidityError();
+        }
+        boolean isFinal = false;
 
+        // checks if the word final exist in the pattern
+        if (matcher.group(1) != null)
+            isFinal = true;
+        String variableType = matcher.group(2);
+        String declares = matcher.group(4);
+
+
+        matcher = Pattern.compile(DECLARATION_EXPRESSION).matcher(declares);
+        // finding all the declarations
+        while (matcher.find()) {
+            if (matcher.group(0).contains("=")){
+                String variableName = matcher.group(1);
+                String value=matcher.group(6);
+                scopes.get(scopeDepth).addNew(variableType, variableName, value, false);
+            }
+            else {
+                String variableName = matcher.group(1);
+                scopes.get(scopeDepth).addNew(variableType, variableName,  null, false);
+            }
+
+//            // checks if the variable is final and it was not assigned while declaration
+//            if (isFinal && input == null)
+//                throw new ValidityError();
+        }
+    }
 
     public static void initializeFinal(Matcher matcher, int scopeDepth) throws ValidityError {
         if (!matcher.matches()) {
@@ -92,14 +138,14 @@ public class CheckVriable {
         }
         String type = matcher.group(1).trim();
         String name = matcher.group(2).trim();
-        if (scopes.get(scopeDepth).contain(name)) {
+        if (scopes.get(scopeDepth).exists(name))  //i added here
+        {
             throw new ValidityError("THERE IS DUPLICATION IN DEFINING THE SAME VARIABLE");
         }
         scopes.get(scopeDepth).addNew(type, name, null, false);
     }
 
 
-    ///this function called when decelerating new variable that contain type name value
     public static void decelerateVar(Matcher matcher, int scopeDepth) throws ValidityError {
         if (!matcher.matches()) {
             throw new ValidityError();
@@ -174,5 +220,6 @@ public class CheckVriable {
         Scope newScope = new Scope();
         newScope.setPrevScope(CheckVriable.scopes.get(CheckVriable.scopes.size() - 1));
         CheckVriable.scopes.add(newScope);
+        scopeDepth++; /// i added here
     }
 }
