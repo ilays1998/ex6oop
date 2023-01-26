@@ -1,2 +1,12 @@
 samimans
 ilaysoffer
+
+test1 - check the semicolon in the end
+test2 - check if we can assign value that not initialize
+test3 - check assign double to boolean
+test4 - check the type checking
+test5 - check assign variable to same variable
+test6 - check final
+test7 - check parameter type not fit;
+test8 - check without type
+test9 -

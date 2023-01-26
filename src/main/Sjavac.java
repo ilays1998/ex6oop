@@ -59,10 +59,13 @@ public class Sjavac {
                     CheckVriable.check(line);
                 }
             }
+            if (CheckMethod.methodBody)
+                throw new Exception("METHOD MUST END!");
 
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(2);
+            return;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(1);
