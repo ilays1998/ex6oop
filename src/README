@@ -1,6 +1,10 @@
 samimans
 ilaysoffer
 
+=============================
+=      Tests description     =
+=============================
+
 test1 - check the semicolon in the end
 test2 - check if we can assign value that not initialize
 test3 - check assign double to boolean
@@ -21,3 +25,78 @@ test17 - check illegal size of parameters in call
 test18 - check closing semicolon
 test19 - Method not end with return;
 test20 - check while and if loops
+
+=============================
+=      File description     =
+=============================
+main package:
+    Sjavac.java- contain the main method and check the arguments and open the file.
+    CheckRow.java - regex checking for general row
+    Scope.java - remember the variable in specific scope
+    RowException.java - exception that relation to syntax of general row
+    ValidityError.java - exception that related to variables
+    CheckVariable.java - check validity of variable
+    VariableLine.java - represent variable
+method package:
+    CheckMethod.java - check method validity
+    MethodException.java - exception that related to syntax of method
+    MethodTable.java - remember all the method in the program and check if legal
+    MethodTableCheckException.java - exception that related to method that call but not declared,
+                                or call with illegal type of argument (in comparison to declaration)
+    WhileIfBlock.java - check if and while block validity
+    WhileIfException.java - exception that related to illegal syntax of if while.
+
+
+
+=============================
+=          Design           =
+=============================
+We implement the compiler checking in the way that after we open the file, we check
+the validity of every row one after one, after that we send the row the validity checking
+to the specific Class that handling this code. In this way we can send informative
+exception and error massage to the user and the code is easy to appending and reading.
+
+
+=============================
+=  Implementation details   =
+=============================
+The Scope Class is implement like linkedList class because the relationship between the scopes.
+The Class MethodTable in order to store the method, we use 3 HashMap. one for checking
+that the method that call was declared (mapping between name to boolean). and 2 another
+HashMap to store the declared types of method and the given types in the call for
+comparing in the end of the program. In this way we can easily separate this checking from
+the other checking and encapsulating the code.
+
+=============================
+=    Answers to questions   =
+=============================
+
+6.1:
+    The way we chose to handle exception is to give every checking class specific exception,
+    and if the Class find error it's throw exception to the upper class and we get tree of
+    exception. so we know for example we have error in Method A in Row C in variable "String c".
+    In the Sjavac class we catch the exception and print the correct message.
+
+6.2:
+    For adding new types to the compiler checking, we just need to append regex that
+    check the syntax of the type (e.g. float) in Check Variable class,
+    and append the name of the type (e.g. "float") to the field of the legal types in the
+    CheckVariable Class.
+    For adding Classes we need to append CheckClasses class that we send to her the
+    checking if we recognize new class, and she do the exactly checking like the code
+    we already written. it's mean to replace the checking in Sjavac class just beginning
+    of class and the class send to the specific checking (e.g. method, global variables).
+    For adding Different methods' return types (i.e int foo()), we need to change only
+    the CheckMethod Class and CheckVariable and MethodTable - to change the CheckVariable
+    for it's will be able to assign call of method to variable, and change the CheckMethod that
+    the declaration can be with other return types (checkDec) and change the
+    return checking method that can return type that is according the declare return
+    type - this will be after we append the MethodTable HashMap that map between method
+    to return types.
+
+6.3:
+    "((\\s*)(\\s*true\\s*|\\s*false\\s*|(\\s*)(-{0,1}\\d+(\\.\\d+){0,1})\\s*))" -
+    regular expression to check boolean type.
+    "\\s*\\\"\\s*[\\w]+\\s*\\\"\\s*|\\\"\\\"" - regular expression to check String type.
+
+
