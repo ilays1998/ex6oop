@@ -76,9 +76,7 @@ public class CheckVriable {
         if (!matcher.matches()) {
             throw new ValidityError();
         }
-        boolean isFinal = false;
-        if (matcher.group(1) != null)
-            isFinal = true;
+        boolean isFinal = matcher.group(1) != null;
         String variableType = matcher.group(2);
         String declares = matcher.group(4);
 
