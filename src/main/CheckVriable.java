@@ -3,17 +3,16 @@ package main;
 import main.Scope;
 import main.ValidityError;
 import main.VariableLine;
+import method.MethodTable;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CheckVriable {
 
-
-
-
-
+    
     /// we can move (scopes and scopeDepth ) to Sjavac class
     public static ArrayList<Scope> scopes = new ArrayList<>();
     private static int scopeDepth = 0;
@@ -28,7 +27,7 @@ public class CheckVriable {
             + "\\s*=\\s*(" + DOBULE + "|" + INT + "|" + BOOLEAN + "|" + VARDICNAME + "|" + STRING + "|"
             + CHAR + ")+\\s*;\\s*";
     public static final String WITH_OUT_TYPE = "\\s*" + VARDICNAME + "\\s=\\s*(" + DOBULE +
-            "|" + INT + "|" + BOOLEAN + "|" + VARDICNAME + "|" + STRING + "|" + CHAR + ")+\\s*;\\s*";
+            "|" + INT + "|" + BOOLEAN + "|" + VARDICNAME + "|" + STRING + "|" + CHAR +  ")+\\s*;\\s*";
     public static final String WITHOUT_EQUAL_MODIFER = "\\s*" + TYPE + "\\s(\\s*" + VARDICNAME +
             "\\s*)\\s*;\\s*";
     public static final String VARIDK_LINE = "\\s*" + TYPE + "\\s*" + VARDICNAME + "\\s*=\\s*(" +
@@ -49,28 +48,28 @@ public class CheckVriable {
     ///this main function that check the row
     public static void check(String line) throws ValidityError {
         if (Pattern.compile(FINAL_VARDIK_LINE).matcher(line).matches()){
-            initializeFinal(Pattern.compile(FINAL_VARDIK_LINE).matcher(line),
+            withFinal(Pattern.compile(FINAL_VARDIK_LINE).matcher(line),
                             scopeDepth);
 
         } else if (Pattern.compile(WITH_OUT_TYPE).matcher(line).matches()) {
-            assignVar(Pattern.compile(WITH_OUT_TYPE).matcher(line),
+            assignValue(Pattern.compile(WITH_OUT_TYPE).matcher(line),
                       scopeDepth);
 
         } else if (Pattern.compile(WITHOUT_EQUAL_MODIFER).matcher(line).matches()) {
-            initializeVar(Pattern.compile(WITHOUT_EQUAL_MODIFER).matcher(line),
+            initializion(Pattern.compile(WITHOUT_EQUAL_MODIFER).matcher(line),
                           scopeDepth);
 
         } else if (Pattern.compile(VARIDK_LINE).matcher(line).matches()) {
-            decelerateVar(Pattern.compile(VARIDK_LINE).matcher(line),
+            deceleration(Pattern.compile(VARIDK_LINE).matcher(line),
                           scopeDepth);
 
         }else if (Pattern.compile(VARIABLE_DECLARATION_LINE).matcher(line).matches()){
             initializaManyVariable(Pattern.compile(VARIABLE_DECLARATION_LINE).matcher(line),
                           scopeDepth);
         }
-
-        else
+        else{
             throw new ValidityError("VARIABLE ILLEGAL: " + line);
+        }
     }
 
     public static void initializaManyVariable(Matcher matcher,int scopeDepth) throws ValidityError{
@@ -78,8 +77,6 @@ public class CheckVriable {
             throw new ValidityError();
         }
         boolean isFinal = false;
-
-        // checks if the word final exist in the pattern
         if (matcher.group(1) != null)
             isFinal = true;
         String variableType = matcher.group(2);
@@ -87,25 +84,20 @@ public class CheckVriable {
 
 
         matcher = Pattern.compile(DECLARATION_EXPRESSION).matcher(declares);
-        // finding all the declarations
         while (matcher.find()) {
             if (matcher.group(0).contains("=")){
                 String variableName = matcher.group(1);
                 String value=matcher.group(6);
-                scopes.get(scopeDepth).addNew(variableType, variableName, value, false);
+                scopes.get(scopeDepth).addVrivalbe(variableType, variableName, value, isFinal);
             }
             else {
                 String variableName = matcher.group(1);
-                scopes.get(scopeDepth).addNew(variableType, variableName,  null, false);
+                scopes.get(scopeDepth).addVrivalbe(variableType, variableName,  null, isFinal);
             }
-
-//            // checks if the variable is final and it was not assigned while declaration
-//            if (isFinal && input == null)
-//                throw new ValidityError();
         }
     }
 
-    public static void initializeFinal(Matcher matcher, int scopeDepth) throws ValidityError {
+    public static void withFinal(Matcher matcher, int scopeDepth) throws ValidityError {
         if (!matcher.matches()) {
             throw new ValidityError();
         }
@@ -113,87 +105,85 @@ public class CheckVriable {
         String type = matcher.group(2).trim();
         String name = matcher.group(3).trim();
         String value = matcher.group(6).trim();
-        addOperator(type, name, value, scopeDepth, true);
+        newVariable(type, name, value, scopeDepth, true);
     }
 
-    ///this function for case (X=3;) that assign the value to  variable
-    public static void assignVar(Matcher matcher, int scopeDepth) throws ValidityError {
+    public static void assignValue(Matcher matcher, int scopeDepth) throws ValidityError {
         if (!matcher.matches()) {
             throw new ValidityError();
         }
         String name = matcher.group(1).trim();
         String value = matcher.group(4).trim();
-        if (scopes.get(scopeDepth).existsNotFinal(name)) {
-            addOperator(null, name, value, scopeDepth, false);
+        if (scopes.get(scopeDepth).found(name) && !scopes.get(scopeDepth).getVariable(name).isFinal) {
+            newVariable(null, name, value, scopeDepth, false);
             return;
         }
         throw new ValidityError("YOU TRY TO ASSIGN VALUE TO AN DEFINE VARIABLE");
     }
 
 
-    /// this function is responsible of of initializing new variables without value
-    public static void initializeVar(Matcher matcher, int scopeDepth) throws ValidityError {
+    public static void initializion(Matcher matcher, int scopeDepth) throws ValidityError {
         if (!matcher.matches()) {
             throw new ValidityError();
         }
         String type = matcher.group(1).trim();
         String name = matcher.group(2).trim();
-        if (scopes.get(scopeDepth).exists(name))  //i added here
+        if (scopes.get(scopeDepth).inThisScope(name))
         {
             throw new ValidityError("THERE IS DUPLICATION IN DEFINING THE SAME VARIABLE");
         }
-        scopes.get(scopeDepth).addNew(type, name, null, false);
+        scopes.get(scopeDepth).addVrivalbe(type, name, null, false);
     }
 
 
-    public static void decelerateVar(Matcher matcher, int scopeDepth) throws ValidityError {
+    public static void deceleration(Matcher matcher, int scopeDepth) throws ValidityError {
         if (!matcher.matches()) {
             throw new ValidityError();
         }
         String type = matcher.group(1).trim();
         String name = matcher.group(2).trim();
         String value = matcher.group(5).trim();
-        if (scopes.get(scopes.size() - 1).contain(name)) {
+        if (scopes.get(scopes.size() - 1).inThisScope(name)) {
 
             throw new ValidityError("THERE IS DUPLICATION IN DEFINING THE SAME VARIABLE");
         }
-        if (scopes.get(scopeDepth).exists(value) && scopes.get(scopeDepth).findVar(value).value != null) {
-            if (scopes.get(scopeDepth).findVar(value).type.equals(type)) {
+        if (scopes.get(scopeDepth).found(value) && scopes.get(scopeDepth).getVariable(value).value != null) {
+            if (scopes.get(scopeDepth).getVariable(value).type.equals(type)) {
                 return;
             }
-            if (type.equals("boolean") && (scopes.get(scopeDepth).findVar(value).type.equals("int") ||
-                    scopes.get(scopeDepth).findVar(value).type.equals("double"))) {
+            if (type.equals("boolean") && (scopes.get(scopeDepth).getVariable(value).type.equals("int") ||
+                    scopes.get(scopeDepth).getVariable(value).type.equals("double"))) {
                 return;
             }
-            if (type.equals("double") && scopes.get(scopeDepth).findVar(value).type.equals("int")) {
+            if (type.equals("double") && scopes.get(scopeDepth).getVariable(value).type.equals("int")) {
                 return;
             }
         }
         validTypeValue(type, value);
-        scopes.get(scopeDepth).addNew(type.trim(), name.trim(), value.trim(), false);
+        scopes.get(scopeDepth).addVrivalbe(type.trim(), name.trim(), value.trim(), false);
     }
 
     /// this function responsible for adding new variable to the scope in case of defining new variable or assign value to exist variable
-    private static void addOperator(String type, String name, String value, int scopeDepth, boolean isFinal) throws ValidityError {
+    private static void newVariable(String type, String name, String value, int scopeDepth, boolean isFinal) throws ValidityError {
         if (isFinal) {
-            if (scopes.get(scopeDepth).contain(name)) {
+            if (scopes.get(scopeDepth).inThisScope(name) ) {
                 throw new ValidityError("THERE IS DUPLICATION IN DEFINING THE SAME VARIABLE");
             }
             try {
                 validTypeValue(type, value);
 
             } catch (ValidityError e) {
-                if (!scopes.get(scopeDepth).exists(value)) {
+                if (!scopes.get(scopeDepth).found(value)) {
                     throw new ValidityError("THERE IS DUPLICATION IN DEFINING THE SAME VARIABLE");
                 }
-                if (!scopes.get(scopeDepth).findVar(value).type.equals(type)) {
-                    throw new ValidityError("sd");
+                if (!scopes.get(scopeDepth).getVariable(value).type.equals(type)) {
+                    throw new ValidityError("THRE IS NOT MATCHING BETWEEN TYPES");
                 }
             }
-            scopes.get(scopeDepth).addNew(type, name, value, true);
+            scopes.get(scopeDepth).addVrivalbe(type, name, value, true);
             return;
         }
-        VariableLine variable = scopes.get(scopeDepth).findVar(name);
+        VariableLine variable = scopes.get(scopeDepth).getVariable(name);
         validTypeValue(variable.type, value);
         variable.value = value;
     }
@@ -220,6 +210,6 @@ public class CheckVriable {
         Scope newScope = new Scope();
         newScope.setPrevScope(CheckVriable.scopes.get(CheckVriable.scopes.size() - 1));
         CheckVriable.scopes.add(newScope);
-        scopeDepth++; /// i added here
+        scopeDepth++;
     }
 }

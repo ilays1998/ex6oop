@@ -115,29 +115,21 @@ public class CheckMethod {
             m = Pattern.compile(CheckVriable.TYPE  + "\\s" + CheckVriable.VARDICNAME  +"|"
                      +CheckVriable.FINAL_VARDIK_LINE + "|\\s*")
                     .matcher(par.trim());
-            //8888888888888888888888888
-            //problem in CheckVriable.FINAL_VARDIK_LINE
-
             if (!m.matches())
                 throw new MethodException("PARAMETER LIST ILLEGAL");
             if (m.group(1) == null)
                 return;
             if (m.group(1).equals("final")) {
                 types.add(m.group(2));
-                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(2),
+                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addVrivalbe(m.group(2),
                         m.group(3), null, true);
             }
             else {
                 types.add(m.group(1));
-                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addNew(m.group(1),
+                CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).addVrivalbe(m.group(1),
                         m.group(2), null, false);
             }
-
-            //888888888888888888888888888888
-            //need to modify this to without value
-
         }
-        //System.out.println(types);
         MethodTable.addMethodDec(name, types);
     }
 
@@ -150,7 +142,6 @@ public class CheckMethod {
         definition = definition.substring(m.start() + 1, m.end() - 1);
     }
 
-    //append HashMap
     public static void checkMethodCall(String line) throws MethodException {
         definition = line.trim();
         try {
@@ -173,41 +164,15 @@ public class CheckMethod {
             if (!Pattern.matches(CheckVriable.INT + "|" +
                     CheckVriable.BOOLEAN + "|" + CheckVriable.STRING + "|" +
                     CheckVriable.DOBULE + "|" +CheckVriable.CHAR + "|\\s*", par.trim()))
-                if (!CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).exists(par.trim()))
+                if (!CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).found(par.trim()))
                     throw new MethodException("PARAMETER LIST ILLEGAL");
                 else {
                     types.add(CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).
-                            findVar(par.trim()).value);
+                            getVariable(par.trim()).value);
                     continue;
                 }
             types.add(par.trim());
         }
-        //System.out.println(types);
         MethodTable.addMethodCall(name, types);
     }
-
-
-    /*public static void main(String[] args) {
-        String name = " void name (int x, boolean bb) {";
-        String call = "call(5, 6);";
-        String ret = "return ;";
-        String close = "}";
-        CheckMethod.definition = name;
-        *//*System.out.println(CheckMethod.checkVoid());
-        System.out.println(CheckMethod.definition);
-        System.out.println(CheckMethod.checkParameterList());
-        System.out.println(CheckMethod.definition);*//*
-        try {
-            checkMethodDec(name);
-            checkMethodCall(call);
-            checkReturn(ret);
-            checkEndMethod(close);
-        } catch (MethodException | RowException e) {
-            e.printStackTrace();
-            System.out.println();
-        }
-
-
-    }*/
-
 }

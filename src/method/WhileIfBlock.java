@@ -28,8 +28,8 @@ public class WhileIfBlock {
                     throw new WhileIfException("EMPTY CONDITION");
                 String[] parameters = m.group(2).split("&&|\\|\\|");
                 for (String par: parameters) {
-                    if (CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).exists(par.trim()) &&
-                        !(CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).findVar(par.trim()) == null) &&
+                    if (CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).found(par.trim()) &&
+                        !(CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).getVariable(par.trim()) == null) &&
                     !isaCharOrString(par)){
                     }
                     else if (!Pattern.matches(CheckVriable.BOOLEAN, par.trim()))
@@ -50,7 +50,7 @@ public class WhileIfBlock {
     }
 
     private static boolean isaCharOrString(String par) {
-        String type = CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).findVar(par.trim()).type;
+        String type = CheckVriable.scopes.get(CheckVriable.scopes.size() - 1).getVariable(par.trim()).type;
         return type.equals("char") || type.equals("String");
     }
 
