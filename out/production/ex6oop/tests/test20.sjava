@@ -1,0 +1,20 @@
+final int a = 5;
+final int b = a;
+int c=6;
+
+String s;
+void boo(int a, int b, String s) {
+	if (true) {
+		while (false && true) {
+
+		}
+		while (true || false ||1.2) {
+
+		}
+	}
+	return;
+}
+
+void soo(boolean b) {
+	return;
+}

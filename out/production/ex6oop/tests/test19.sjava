@@ -1,0 +1,11 @@
+
+void a() {
+
+return;
+int f = 6;
+}
+
+void b() {
+
+return;
+}

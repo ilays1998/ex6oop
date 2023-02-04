@@ -1,0 +1,11 @@
+void foo(int a) {
+if (true) {
+while (true) {
+}
+}
+}
+return;
+}
+void foo2(int b) {
+return;
+}
